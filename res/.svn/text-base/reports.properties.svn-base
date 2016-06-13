@@ -1,0 +1,12 @@
+#nombreReporte (sin espacios) = pathReporte en paquetes
+Acciones=/beltza/report/resources/OperacionesAcciones.jasper
+Billetes=/beltza/report/resources/OperacionesBilletes.jasper
+Bonos=/beltza/report/resources/OperacionesBonos.jasper
+Monedas=/beltza/report/resources/OperacionesMonedas.jasper
+Canjes=/beltza/report/resources/OperacionesCanjes.jasper
+Ingresos.Egresos=/beltza/report/resources/OperacionesIngEgre.jasper
+Altas.Bajas.CC=/beltza/report/resources/OperacionesAltaBajaCC.jasper
+Stock=/beltza/report/resources/Stock.jasper
+Movs.Cta.Cte=/beltza/report/resources/MovsCtasCtes.jasper
+Saldos.Ctas.Ctes=/beltza/report/resources/SaldosCtasCtes.jasper
+#Saldos.Ctas.Ctes.Por.Fecha=/beltza/report/resources/SaldosCtasCtesPorFecha.jasper

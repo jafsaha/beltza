@@ -1,0 +1,24 @@
+## Version de la aplicacion
+application.version=23
+
+### Codigo de especie por defecto
+especie.referencia.codigo=BB
+
+### Especies monitoreo separadas por coma
+especies.monitoreo.codigos=$
+
+### Reporte Rápido
+quickReport.codigo.1=Stock
+quickReport.codigo.1.shortcut=P
+quickReport.codigo.2=Saldos.Ctas.Ctes
+
+### Reporte Doble clic Saldos Clientes (path completo)
+movsCtasCtesDClick.name=MovsCtasCtesDClick
+movsCtasCtesDClick.path=/beltza/report/resources/MovsCtasCtesDClick.jasper
+
+### Reporte Doble clic Saldos Clientes Alternativo (path completo)
+movsCtasCtesDClickAlt.name=MovsCtasCtesDClickTodos
+movsCtasCtesDClickAlt.path=/beltza/report/resources/MovsCtasCtesDClickTodos.jasper
+
+movsCtasCtesEspeciePorCliente.name=MovsCtaCteEspeciePorCliente
+movsCtasCtesEspeciePorCliente.path=/beltza/report/resources/MovsCtasCtesPorEspecie.jasper

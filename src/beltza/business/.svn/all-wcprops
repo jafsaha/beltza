@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/316/trunk/Beltza_prj/src/beltza/business
+END
+BeltzaBusinessModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/310/trunk/Beltza_prj/src/beltza/business/BeltzaBusinessModel.java
+END
+BeltzaBusinessModelImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/316/trunk/Beltza_prj/src/beltza/business/BeltzaBusinessModelImpl.java
+END
+BeltzaBusinessException.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/166/trunk/Beltza_prj/src/beltza/business/BeltzaBusinessException.java
+END

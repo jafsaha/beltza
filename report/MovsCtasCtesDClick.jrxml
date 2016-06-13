@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="MovsCtasCtesDClick"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="790"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="22"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="FechaOperacion" isForPrompting="false" class="java.util.Date"/>
+	<parameter name="DiaId" isForPrompting="false" class="java.lang.Long"/>
+	<parameter name="elCliente" isForPrompting="true" class="java.lang.String"/>
+	<parameter name="laEspecie" isForPrompting="true" class="java.lang.String"/>
+	<parameter name="fechaCorte" isForPrompting="true" class="java.util.Date"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select c.CODIGO as cliente, m.CANTIDAD, e.CODIGO as especie, o.TIPO, o.SUBTIPO, o.NOTAS,
+(select FECHAASOCIADA from dias where dias.ID = m.DIACONCRECIONID) as fechaCancelacion
+, m.VALORIZACION, dias.fechaasociada as fechaOperacion
+, CASE WHEN m.TIPO = 'CANCELACION' THEN fechaCancelacion WHEN o.FECHALIQUIDACION is null THEN fechaOperacion ELSE o.FECHALIQUIDACION END as fechaOrden
+, o.CANTIDAD as CantidadBase, m.TIPO as org_canc, o.CANTIDADSALE,e.AFOROINVERSO,
+(select CODIGO from especies where especies.id = o.ESPECIEENTRAID) as espEntra,
+(select CODIGO from especies where especies.id = o.ESPECIESALEID) as espSale
+from movimientos as m, dias
+left join clientes as c on
+	c.ID = m.CLIENTEID
+left join especies as e on
+	e.ID = m.ESPECIEID
+left join operaciones as o on
+	o.ID = m.OPERACIONID
+where (m.DIAID = dias.id)
+AND (fechaOrden >= $P{fechaCorte})
+AND (cliente = $P{elCliente})
+AND (especie = $P{laEspecie})
+order by m.ESPECIEID, fechaOrden, m.DIAID, m.ID]]></queryString>
+
+	<field name="CLIENTE" class="java.lang.String"/>
+	<field name="CANTIDAD" class="java.lang.Double"/>
+	<field name="ESPECIE" class="java.lang.String"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="SUBTIPO" class="java.lang.String"/>
+	<field name="NOTAS" class="java.lang.String"/>
+	<field name="FECHACANCELACION" class="java.sql.Date"/>
+	<field name="VALORIZACION" class="java.lang.Double"/>
+	<field name="FECHAOPERACION" class="java.sql.Date"/>
+	<field name="FECHAORDEN" class="java.sql.Date"/>
+	<field name="CANTIDADBASE" class="java.lang.Double"/>
+	<field name="ORG_CANC" class="java.lang.String"/>
+	<field name="CANTIDADSALE" class="java.lang.Double"/>
+	<field name="ESPENTRA" class="java.lang.String"/>
+	<field name="ESPSALE" class="java.lang.String"/>
+	<field name="AFOROINVERSO" class="java.lang.Boolean"/>
+
+	<variable name="TipoOper" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($F{TIPO}.equals("INGRESO") || $F{TIPO}.equals("EGRESO")) ? "Tax" : ($F{TIPO}.equals("ALTA") ? "Débito CtaCte" : ($F{TIPO}.equals("BAJA") ? "Crédito CtaCte" : "*"))]]></variableExpression>
+	</variable>
+	<variable name="Signo" class="java.lang.Double" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($F{TIPO}.equals("INGRESO") || $F{TIPO}.equals("ALTA") || $F{TIPO}.equals("CANJE") || $F{TIPO}.equals("COMPRA")) ? new Double (-1.0) : new Double (1.0)]]></variableExpression>
+	</variable>
+	<variable name="SaldoAnterior" class="java.lang.Double" resetType="None" calculation="System">
+	</variable>
+	<variable name="SigCancela" class="java.lang.Double" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[$F{ORG_CANC}.equals("CANCELACION") ? new Double (-1.0) : new Double (1.0)]]></variableExpression>
+	</variable>
+	<variable name="CantidadBase" class="java.lang.Double" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[new Double($F{CANTIDADBASE}.doubleValue() * $V{Signo}.doubleValue() * $V{SigCancela}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="Importe" class="java.lang.Double" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[$F{TIPO}.equals("CANJE") ? new Double($F{CANTIDADSALE}.doubleValue()*$V{SigCancela}.doubleValue()) : ($F{AFOROINVERSO}.equals(Boolean.TRUE) && !$F{ESPECIE}.equals("$")?new Double($V{CantidadBase}.doubleValue()/$F{VALORIZACION}.doubleValue() * -1.0):new Double($V{CantidadBase}.doubleValue()*$F{VALORIZACION}.doubleValue() * -1.0))]]></variableExpression>
+	</variable>
+	<variable name="SaldoCorrido" class="java.lang.Double" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[new Double (($F{CANTIDAD}.doubleValue() * -1.0) + $V{SaldoCorrido}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="TipoOperLeyenda" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[$F{TIPO}.equals("COMPRA") ? "Vta "+$F{SUBTIPO}.toLowerCase() : ($F{TIPO}.equals("VENTA") ? "Cpra "+$F{SUBTIPO}.toLowerCase() : ($F{TIPO}.equals("CANJE") ? $F{TIPO}.toLowerCase() : $V{TipoOper}))]]></variableExpression>
+	</variable>
+	<variable name="EspecieUno" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[$F{TIPO}.equals("COMPRA") ? $F{ESPENTRA} : ($F{TIPO}.equals("VENTA") ? $F{ESPSALE} : ($F{TIPO}.equals("CANJE") ? ($F{ESPECIE}.equals($F{ESPENTRA}) ? $F{ESPENTRA} : $F{ESPENTRA}) : ((($F{TIPO}.equals("ALTA")) || $F{TIPO}.equals("INGRESO")) ? $F{ESPENTRA} : $F{ESPSALE})))]]></variableExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="13"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="14"
+						y="1"
+						width="96"
+						height="12"
+						key="subreport-1"/>
+					<subreportParameter  name="elCliente">
+						<subreportParameterExpression><![CDATA[$P{elCliente}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="laEspecie">
+						<subreportParameterExpression><![CDATA[$P{laEspecie}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="fechaCorte">
+						<subreportParameterExpression><![CDATA[$P{fechaCorte}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<returnValue subreportVariable="SaldoAnterior" toVariable="SaldoAnterior"/>
+					<returnValue subreportVariable="SaldoAnterior" toVariable="SaldoCorrido"/>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "MovsCtasCtesDClickSaldo.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="25"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="678"
+						y="1"
+						width="100"
+						height="21"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$P{fechaCorte}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="259"
+						y="1"
+						width="419"
+						height="21"
+						key="textField-8"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Movimientos de Cuenta Corriente de "+$P{elCliente}+" en "+$F{ESPECIE}+" a partir del "]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="35"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="249"
+						y="22"
+						width="0"
+						height="13"
+						key="line-14"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="22"
+						width="0"
+						height="13"
+						key="line-15"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="215"
+						y="22"
+						width="0"
+						height="13"
+						key="line-16"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="133"
+						y="22"
+						width="0"
+						height="13"
+						key="line-17"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="66"
+						y="22"
+						width="0"
+						height="13"
+						key="line-18"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="34"
+						width="787"
+						height="0"
+						key="line-19"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="788"
+						height="0"
+						key="line-21"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="67"
+						y="22"
+						width="65"
+						height="13"
+						key="staticText-1"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Fecha Oper.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="216"
+						y="22"
+						width="32"
+						height="13"
+						key="staticText-2"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Espec.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="250"
+						y="22"
+						width="100"
+						height="13"
+						key="staticText-3"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Cantidad]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="22"
+						width="65"
+						height="13"
+						key="staticText-4"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Fecha Venc.]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="645"
+						y="22"
+						width="0"
+						height="13"
+						key="line-24"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="134"
+						y="22"
+						width="80"
+						height="13"
+						key="staticText-5"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Tipo Operación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="646"
+						y="22"
+						width="140"
+						height="13"
+						key="staticText-6"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Notas]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="787"
+						y="22"
+						width="0"
+						height="13"
+						key="line-25"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="351"
+						y="22"
+						width="0"
+						height="13"
+						key="line-27"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="352"
+						y="22"
+						width="65"
+						height="13"
+						key="staticText-7"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Precio]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="418"
+						y="22"
+						width="0"
+						height="13"
+						key="line-29"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="452"
+						y="22"
+						width="90"
+						height="13"
+						key="staticText-8"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Importe]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="217"
+						y="7"
+						width="98"
+						height="13"
+						key="staticText-9"/>
+					<box leftPadding="2"></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Saldo Anterior]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="543"
+						y="22"
+						width="0"
+						height="13"
+						key="line-31"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="544"
+						y="22"
+						width="100"
+						height="13"
+						key="textField-12"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Saldo "+$F{ESPECIE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="315"
+						y="7"
+						width="70"
+						height="13"
+						key="textField-13"/>
+					<box rightPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{SaldoAnterior}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="451"
+						y="22"
+						width="0"
+						height="13"
+						key="line-34"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="419"
+						y="22"
+						width="32"
+						height="13"
+						key="staticText-10"/>
+					<box leftPadding="2"></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Imp.]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="13"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="67"
+						y="0"
+						width="65"
+						height="13"
+						key="textField"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{FECHAOPERACION}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="249"
+						y="0"
+						width="0"
+						height="13"
+						key="line-8"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="0"
+						height="13"
+						key="line-9"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="215"
+						y="0"
+						width="0"
+						height="13"
+						key="line-11"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="133"
+						y="0"
+						width="0"
+						height="13"
+						key="line-12"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="66"
+						y="0"
+						width="0"
+						height="13"
+						key="line-13"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="216"
+						y="0"
+						width="32"
+						height="13"
+						key="textField-3"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{EspecieUno}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="250"
+						y="0"
+						width="100"
+						height="13"
+						key="textField-4"/>
+					<box rightPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{CantidadBase}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="65"
+						height="13"
+						key="textField-5"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{FECHAORDEN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="134"
+						y="0"
+						width="80"
+						height="13"
+						key="textField-6"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ORG_CANC}.equals("CANCELACION") ? "Liq. "+$V{TipoOperLeyenda} : $V{TipoOperLeyenda}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="646"
+						y="0"
+						width="140"
+						height="13"
+						key="textField-7"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NOTAS}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="645"
+						y="0"
+						width="0"
+						height="13"
+						key="line-23"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="787"
+						y="0"
+						width="0"
+						height="13"
+						key="line-26"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="351"
+						y="0"
+						width="0"
+						height="13"
+						key="line-28"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="#,##0.000000" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="352"
+						y="0"
+						width="65"
+						height="13"
+						key="textField-9"/>
+					<box rightPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{VALORIZACION}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="418"
+						y="0"
+						width="0"
+						height="13"
+						key="line-30"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="452"
+						y="0"
+						width="90"
+						height="13"
+						key="textField-10"/>
+					<box rightPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{Importe}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="543"
+						y="0"
+						width="0"
+						height="13"
+						key="line-32"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="544"
+						y="0"
+						width="100"
+						height="13"
+						key="textField-11"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{SaldoCorrido}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="451"
+						y="0"
+						width="0"
+						height="13"
+						key="line-35"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="419"
+						y="0"
+						width="32"
+						height="13"
+						key="textField-14"/>
+					<box leftPadding="2">					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{EspecieUno}.equals($F{ESPENTRA}) ? $F{ESPSALE} : $F{ESPENTRA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="1"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="788"
+						height="0"
+						key="line-33"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="9"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<lastPageFooter>
+			<band height="8"  isSplitAllowed="true" >
+			</band>
+		</lastPageFooter>
+		<summary>
+			<band height="1"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="788"
+						height="0"
+						key="line-22"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</summary>
+</jasperReport>
