@@ -43,10 +43,17 @@ public class BookBuilder {
 		OperacionDTO operacion= new OperacionDTO();
 		operacion.setClienteCod(getClientCod(row.getCell(config.getClientIdIdx())));
 		operacion.setEspecieEntraCod(getCodigoEspecie(row.getCell(config.getEspecieIdx())));
+		
+		operacion.setDiaId(null);
+		operacion.setLiquidado(false);
+		
 		operacion.setValorizacion(getValorizacion(row.getCell(config.getValorizacionIdx())));
 		operacion.setFechaLiquidacion(getFechaLiquidacion(row.getCell(config.getFechaLiquidacionIdx())));
 		operacion.setCantidad(getValorizacion(row.getCell(config.getMontoIdx())));
-		operacion.setTipo(OperacionType.ALTA);
+		
+		
+		operacion.setTipo(OperacionType.COMPRA);
+		operacion.setEspecieSaleCod("Cuenta123");
 		operacion.setSubtipo(OperacionSubType.MONEDA);
 		
 		return operacion;

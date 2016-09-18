@@ -1,0 +1,94 @@
+00:16:02,793 DEBUG TransactionAspect:? - Transaction rollback en addOperacion
+00:16:23,194 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:23,195 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormReportsSelect:DIA
+00:16:23,197 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:DIA
+00:16:23,198 DEBUG TransactionAspect:? - Transaction commit en abrirDia
+00:16:35,770 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,779 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,782 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:16:35,782 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:16:35,792 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,792 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:16:35,792 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:16:35,793 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormMovimientosLista:MOVIMIENTO
+00:16:35,794 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormCtaCteClientesLista:MOVIMIENTO
+00:16:35,795 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperUnariaLista:OPERACION
+00:16:35,796 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperBinariaLista:OPERACION
+00:16:35,797 DEBUG TransactionAspect:? - Transaction commit en addOperacion
+00:16:35,797 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,802 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,802 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:16:35,802 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:16:35,802 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormMovimientosLista:MOVIMIENTO
+00:16:35,803 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormCtaCteClientesLista:MOVIMIENTO
+00:16:35,803 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperUnariaLista:OPERACION
+00:16:35,803 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperBinariaLista:OPERACION
+00:16:35,804 DEBUG TransactionAspect:? - Transaction commit en addOperacion
+00:16:35,805 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,810 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:16:35,811 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:16:35,812 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:16:35,812 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormMovimientosLista:MOVIMIENTO
+00:16:35,812 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormCtaCteClientesLista:MOVIMIENTO
+00:16:35,813 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperUnariaLista:OPERACION
+00:16:35,814 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperBinariaLista:OPERACION
+00:16:35,815 DEBUG TransactionAspect:? - Transaction commit en addOperacion
+00:23:27,363 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:23:27,364 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:23:27,365 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:23:27,365 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:23:27,366 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:23:27,367 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:23:27,367 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:23:27,369 DEBUG BeltzaBusinessModelImpl:? - Especie Entra: AAA
+00:23:27,370 DEBUG BeltzaBusinessModelImpl:? - Especie Sale: 21
+00:23:27,370 DEBUG BeltzaBusinessModelImpl:? - Especie Comercializada: AAA
+00:23:27,370 DEBUG BeltzaBusinessModelImpl:? - Especie Cuenta: 21
+00:23:27,371 DEBUG BeltzaBusinessModelImpl:? - Especie Valorizada: AAA
+00:23:27,371 DEBUG BeltzaBusinessModelImpl:? - Valorizacion Ingresada: 2222.0
+00:23:27,372 DEBUG BeltzaBusinessModelImpl:? - Valorizacion Real: 2222.0
+00:23:27,372 DEBUG BeltzaBusinessModelImpl:? - Cantidad comercializada: 2.0
+00:23:27,372 DEBUG BeltzaBusinessModelImpl:? - Cantidad cuenta: -4444.0
+00:23:27,373 DEBUG BeltzaBusinessModelImpl:? - Cantidad valorizada: 2.0
+00:23:27,375 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:23:27,376 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:23:27,376 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:23:27,377 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperUnariaLista:OPERACION
+00:23:27,378 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperBinariaLista:OPERACION
+00:23:27,378 DEBUG TransactionAspect:? - Transaction commit en addOperacion
+00:23:27,382 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:23:27,383 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 3
+00:23:27,385 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:23:27,385 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 2
+00:23:46,850 DEBUG BeltzaBusinessModelImpl:? - Especie Entra: AAA
+00:23:46,850 DEBUG BeltzaBusinessModelImpl:? - Especie Sale: 21
+00:23:46,851 DEBUG BeltzaBusinessModelImpl:? - Especie Comercializada: AAA
+00:23:46,851 DEBUG BeltzaBusinessModelImpl:? - Especie Cuenta: 21
+00:23:46,852 DEBUG BeltzaBusinessModelImpl:? - Especie Valorizada: AAA
+00:23:46,852 DEBUG BeltzaBusinessModelImpl:? - Valorizacion Ingresada: 2222.0
+00:23:46,852 DEBUG BeltzaBusinessModelImpl:? - Valorizacion Real: 2222.0
+00:23:46,853 DEBUG BeltzaBusinessModelImpl:? - Cantidad comercializada: 2.0
+00:23:46,853 DEBUG BeltzaBusinessModelImpl:? - Cantidad cuenta: -4444.0
+00:23:46,854 DEBUG BeltzaBusinessModelImpl:? - Cantidad valorizada: 2.0
+00:23:46,856 DEBUG BeltzaBusinessModelImpl:? - Notificando...
+00:23:46,857 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormEspeciesList:ESPECIE
+00:23:46,858 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormPrincipal:ESPECIE
+00:23:46,860 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperUnariaLista:OPERACION
+00:23:46,860 DEBUG BeltzaBusinessModelImpl:? - Notificando beltza.form.FormOperBinariaLista:OPERACION
+00:23:46,861 DEBUG TransactionAspect:? - Transaction commit en addOperacion
+00:23:46,861 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:23:46,861 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 0
+00:23:46,862 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:23:46,863 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 1
+00:24:46,674 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:24:46,674 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 1
+00:24:46,675 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:24:46,675 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 0
+00:24:53,176 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 2 operaciones.
+00:24:53,178 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 3
+00:24:53,180 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:24:53,180 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 1
+00:24:53,376 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 2 operaciones.
+00:24:53,378 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 3
+00:24:53,378 DEBUG BeltzaBusinessModelImpl:? - Se encontraron 0 operaciones.
+00:24:53,378 DEBUG BeltzaBusinessModelImpl:? - searchOperaciones en: 0
