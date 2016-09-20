@@ -1,4 +1,4 @@
-package beltza.form;
+package beltza.view.menu.file;
 
 import java.awt.Color;
 import java.awt.ComponentOrientation;
@@ -14,7 +14,6 @@ import java.beans.PropertyVetoException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,10 +33,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
 import beltza.BeltzaApplication;
 import beltza.business.BeltzaBusinessModel;
 import beltza.business.event.BeltzaEvent;
@@ -47,6 +42,16 @@ import beltza.commons.BookBuilder;
 import beltza.domain.Dia;
 import beltza.domain.Especie;
 import beltza.dto.OperacionDTO;
+import beltza.form.FormCierresList;
+import beltza.form.FormCompactData;
+import beltza.form.FormCtaCteClientesLista;
+import beltza.form.FormEspeciesList;
+import beltza.form.FormMovimientosLista;
+import beltza.form.FormOpenDay;
+import beltza.form.FormOperBinariaLista;
+import beltza.form.FormOperUnariaLista;
+import beltza.form.FormReportsSelect;
+import beltza.form.FormUpdatePsw;
 import beltza.report.BeltzaReportManager;
 import beltza.util.UtilGUI;
 
@@ -55,40 +60,40 @@ import beltza.util.UtilGUI;
  */
 public class FormPrincipal extends JFrame implements BeltzaObserver {
 
-	private JLabel infoLabel;
-	private BeltzaBusinessModel model;
 	/**
 	 * Atributos de Clase
 	 */
 	private static final long serialVersionUID = 1L;
 	private static FormPrincipal myInstance;
+	private JLabel infoLabel;
+	private BeltzaBusinessModel model;
 	/**
 	 * Atributos
 	 */
-	private javax.swing.JPanel jContentPanelPrincipal = null;
+	private JPanel jContentPanelPrincipal = null;
 	private javax.swing.JMenuBar jJMenuBar = null;
-	private javax.swing.JMenu jMenuArchivo = null;
-	private javax.swing.JMenu jMenuUtilidades = null;
-	private javax.swing.JMenu jMenuOperaciones = null;
-	private javax.swing.JMenu jMenuListados = null;
-	private javax.swing.JMenu jMenuAyuda = null;
-	private javax.swing.JMenuItem jMenuItemAbrirDia = null;
-	private javax.swing.JMenuItem jMenuItemCerrarDia = null;
-	private javax.swing.JMenuItem jMenuItemReabrirDia = null;
-	private javax.swing.JMenuItem jMenuItemBorrarDia = null;
-	private javax.swing.JMenuItem jMenuItemCompactar = null;
-	private javax.swing.JMenuItem jMenuItemSalir = null;
-	private javax.swing.JMenuItem jMenuItemAforo = null;
-	private javax.swing.JMenuItem jMenuItemCierres = null;
-	private javax.swing.JMenuItem jMenuItemClaves = null;
-	private javax.swing.JMenuItem jMenuItemBulkUpload = null;
-	private javax.swing.JMenuItem jMenuItemLista = null;
-	private javax.swing.JMenuItem jMenuItemCuentas = null;
-	private javax.swing.JMenuItem jMenuItemIngrEgr = null;
-	private javax.swing.JMenuItem jMenuItemCtaCteClientes = null;
-	private javax.swing.JMenuItem jMenuItemReportes = null;
-	private javax.swing.JMenuItem jMenuItemReporteDirecto = null;
-	private javax.swing.JMenuItem jMenuItemAcerca = null;
+	private JMenu jMenuArchivo = null;
+	private JMenu jMenuUtilidades = null;
+	private JMenu jMenuOperaciones = null;
+	private JMenu jMenuListados = null;
+	private JMenu jMenuAyuda = null;
+	private JMenuItem jMenuItemAbrirDia = null;
+	private JMenuItem jMenuItemCerrarDia = null;
+	private JMenuItem jMenuItemReabrirDia = null;
+	private JMenuItem jMenuItemBorrarDia = null;
+	private JMenuItem jMenuItemCompactar = null;
+	private JMenuItem jMenuItemSalir = null;
+	private JMenuItem jMenuItemAforo = null;
+	private JMenuItem jMenuItemCierres = null;
+	private JMenuItem jMenuItemClaves = null;
+	private JMenuItem jMenuItemBulkUpload = null;
+	private JMenuItem jMenuItemLista = null;
+	private JMenuItem jMenuItemCuentas = null;
+	private JMenuItem jMenuItemIngrEgr = null;
+	private JMenuItem jMenuItemCtaCteClientes = null;
+	private JMenuItem jMenuItemReportes = null;
+	private JMenuItem jMenuItemReporteDirecto = null;
+	private JMenuItem jMenuItemAcerca = null;
 
 	private FormUpdatePsw frmUpdatePsw = null;
 	private FormEspeciesList frmEspeciesList = null;
@@ -108,16 +113,6 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 	private JLabel jlblPesos = null;
 	private JTextField jtxtPesos = null;
 
-	// Singleton
-	public static FormPrincipal getInstance() {
-		if (myInstance == null) {
-			myInstance = new FormPrincipal();
-			return myInstance;
-		} else {
-			return myInstance;
-		}
-	}
-
 	/**
 	 * This is the default constructor
 	 */
@@ -133,6 +128,16 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		initialize();
 	}
 
+	// Singleton
+	public static FormPrincipal getInstance() {
+		if (myInstance == null) {
+			myInstance = new FormPrincipal();
+			return myInstance;
+		} else {
+			return myInstance;
+		}
+	}
+
 	private void initialize() {
 		// Set Look & Feel
 		try {
@@ -141,32 +146,32 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 			e.printStackTrace();
 		}
 
-//		try {
-//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//				if ("Nimbus".equals(info.getName())) {
-//					UIManager.setLookAndFeel(info.getClassName());
-//					break;
-//				}
-//			}
-//		} catch (UnsupportedLookAndFeelException e) {
-//			//logger.debug(e);
-//		} catch (ClassNotFoundException e) {
-//			//logger.debug(e);
-//		} catch (InstantiationException e) {
-//			//logger.debug(e);
-//		} catch (IllegalAccessException e) {
-//			//logger.debug(e);
-//		}
-		
+		//		try {
+		//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		//				if ("Nimbus".equals(info.getName())) {
+		//					UIManager.setLookAndFeel(info.getClassName());
+		//					break;
+		//				}
+		//			}
+		//		} catch (UnsupportedLookAndFeelException e) {
+		//			//logger.debug(e);
+		//		} catch (ClassNotFoundException e) {
+		//			//logger.debug(e);
+		//		} catch (InstantiationException e) {
+		//			//logger.debug(e);
+		//		} catch (IllegalAccessException e) {
+		//			//logger.debug(e);
+		//		}
+
 		this.setContentPane(getJContentPanelPrincipal());
 		this.setJMenuBar(getJJMenuBar());
 		this.setBounds(0, 0, 1024, 768);
 		this.setLocation(0, 0);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.setMaximumSize(new java.awt.Dimension(1024, 768));
+		this.setMaximumSize(new Dimension(1024, 768));
 		this.setMinimumSize(new Dimension(1024, 768));
 		this.setName("framePrincipal");
-		this.setPreferredSize(new java.awt.Dimension(1024, 768));
+		this.setPreferredSize(new Dimension(1024, 768));
 		this.setResizable(true);
 
 		// UtilGUI.maximize(this);
@@ -258,15 +263,15 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jContentPanelPrincipal
-	 * 
+	 *
 	 * @return javax.swing.JPanel
 	 */
-	private javax.swing.JPanel getJContentPanelPrincipal() {
+	private JPanel getJContentPanelPrincipal() {
 		if (jContentPanelPrincipal == null) {
-			jContentPanelPrincipal = new javax.swing.JPanel();
+			jContentPanelPrincipal = new JPanel();
 			jContentPanelPrincipal.setLayout(null);
 			jContentPanelPrincipal.setName("jpanelPrincipal");
-			jContentPanelPrincipal.setBackground(new java.awt.Color(153, 153, 153));
+			jContentPanelPrincipal.setBackground(new Color(153, 153, 153));
 			jContentPanelPrincipal.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 			jContentPanelPrincipal.add(getJDesktopPane(), null);
 			jContentPanelPrincipal.add(getJPanelEstadoFinanciera(), null);
@@ -277,7 +282,7 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jJMenuBar
-	 * 
+	 *
 	 * @return javax.swing.JMenuBar
 	 */
 	private javax.swing.JMenuBar getJJMenuBar() {
@@ -288,20 +293,20 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 			jJMenuBar.add(getJMenuOperaciones());
 			jJMenuBar.add(getJMenuListados());
 			jJMenuBar.add(getJMenuAyuda());
-			jJMenuBar.setPreferredSize(new java.awt.Dimension(793, 23));
-			jJMenuBar.setBackground(java.awt.SystemColor.control);
+			jJMenuBar.setPreferredSize(new Dimension(793, 23));
+			jJMenuBar.setBackground(SystemColor.control);
 		}
 		return jJMenuBar;
 	}
 
 	/**
 	 * This method initializes jMenuArchivo
-	 * 
+	 *
 	 * @return javax.swing.JMenu
 	 */
-	private javax.swing.JMenu getJMenuArchivo() {
+	private JMenu getJMenuArchivo() {
 		if (jMenuArchivo == null) {
-			jMenuArchivo = new javax.swing.JMenu();
+			jMenuArchivo = new JMenu();
 			jMenuArchivo.add(getJMenuItemAbrirDia());
 			jMenuArchivo.add(getJMenuItemCerrarDia());
 			jMenuArchivo.addSeparator();
@@ -312,37 +317,37 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 			jMenuArchivo.addSeparator();
 			jMenuArchivo.add(getJMenuItemSalir());
 			jMenuArchivo.setText("Archivo");
-			jMenuArchivo.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+			jMenuArchivo.setFont(new Font("Dialog", Font.BOLD, 12));
 			jMenuArchivo.setName("jMenuArchivo");
-			jMenuArchivo.setBackground(java.awt.SystemColor.control);
+			jMenuArchivo.setBackground(SystemColor.control);
 		}
 		return jMenuArchivo;
 	}
 
-	private javax.swing.JMenu getJMenuUtilidades() {
+	private JMenu getJMenuUtilidades() {
 		if (jMenuUtilidades == null) {
-			jMenuUtilidades = new javax.swing.JMenu();
+			jMenuUtilidades = new JMenu();
 			jMenuUtilidades.add(getJMenuItemAforo());
 			jMenuUtilidades.add(getJMenuItemCierres());
 			jMenuUtilidades.add(getjMenuItemBulkUpload());
 			jMenuUtilidades.addSeparator();
 			jMenuUtilidades.add(getJMenuItemClaves());
 			jMenuUtilidades.setText("Utilidades");
-			jMenuUtilidades.setBackground(java.awt.SystemColor.control);
+			jMenuUtilidades.setBackground(SystemColor.control);
 		}
 		return jMenuUtilidades;
 	}
 
 	/**
 	 * This method initializes jMenuOperaciones
-	 * 
+	 *
 	 * @return javax.swing.JMenu
 	 */
-	private javax.swing.JMenu getJMenuOperaciones() {
+	private JMenu getJMenuOperaciones() {
 		if (jMenuOperaciones == null) {
-			jMenuOperaciones = new javax.swing.JMenu();
+			jMenuOperaciones = new JMenu();
 			jMenuOperaciones.setText("Operaciones");
-			jMenuOperaciones.setBackground(java.awt.SystemColor.control);
+			jMenuOperaciones.setBackground(SystemColor.control);
 			jMenuOperaciones.add(getJMenuItemIngrEgr());
 			jMenuOperaciones.add(getJMenuItemLista());
 			jMenuOperaciones.addSeparator();
@@ -353,12 +358,12 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuOperaciones;
 	}
 
-	private javax.swing.JMenu getJMenuListados() {
+	private JMenu getJMenuListados() {
 		if (jMenuListados == null) {
-			jMenuListados = new javax.swing.JMenu();
+			jMenuListados = new JMenu();
 			jMenuListados.add(getJMenuItemReportes());
 			jMenuListados.setText("Listados");
-			jMenuListados.setBackground(java.awt.SystemColor.control);
+			jMenuListados.setBackground(SystemColor.control);
 			jMenuListados.addSeparator();
 			jMenuListados.add(getJMenuReporteDirecto());
 			// JMenu pp = new JMenu("Reports");
@@ -370,24 +375,24 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jMenuAyuda
-	 * 
+	 *
 	 * @return javax.swing.JMenu
 	 */
-	private javax.swing.JMenu getJMenuAyuda() {
+	private JMenu getJMenuAyuda() {
 		if (jMenuAyuda == null) {
-			jMenuAyuda = new javax.swing.JMenu();
+			jMenuAyuda = new JMenu();
 			jMenuAyuda.add(getJMenuItemAcerca());
 			jMenuAyuda.setText("Ayuda");
-			jMenuAyuda.setBackground(java.awt.SystemColor.control);
+			jMenuAyuda.setBackground(SystemColor.control);
 		}
 		return jMenuAyuda;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemAbrirDia() {
+	private JMenuItem getJMenuItemAbrirDia() {
 		if (jMenuItemAbrirDia == null) {
-			jMenuItemAbrirDia = new javax.swing.JMenuItem();
+			jMenuItemAbrirDia = new JMenuItem();
 			jMenuItemAbrirDia.setText("Abrir D\u00EDa");
-			jMenuItemAbrirDia.setBackground(java.awt.SystemColor.control);
+			jMenuItemAbrirDia.setBackground(SystemColor.control);
 			jMenuItemAbrirDia.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					openDay();
@@ -397,11 +402,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemAbrirDia;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemReabrirDia() {
+	private JMenuItem getJMenuItemReabrirDia() {
 		if (jMenuItemReabrirDia == null) {
-			jMenuItemReabrirDia = new javax.swing.JMenuItem();
+			jMenuItemReabrirDia = new JMenuItem();
 			jMenuItemReabrirDia.setText("Re-abrir D\u00EDa");
-			jMenuItemReabrirDia.setBackground(java.awt.SystemColor.control);
+			jMenuItemReabrirDia.setBackground(SystemColor.control);
 			jMenuItemReabrirDia.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					reopenDay();
@@ -411,11 +416,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemReabrirDia;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemBorrarDia() {
+	private JMenuItem getJMenuItemBorrarDia() {
 		if (jMenuItemBorrarDia == null) {
-			jMenuItemBorrarDia = new javax.swing.JMenuItem();
+			jMenuItemBorrarDia = new JMenuItem();
 			jMenuItemBorrarDia.setText("Borrar \u00FAltimo d\u00EDa");
-			jMenuItemBorrarDia.setBackground(java.awt.SystemColor.control);
+			jMenuItemBorrarDia.setBackground(SystemColor.control);
 			jMenuItemBorrarDia.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					deleteDay();
@@ -425,11 +430,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemBorrarDia;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemCompactar() {
+	private JMenuItem getJMenuItemCompactar() {
 		if (jMenuItemCompactar == null) {
-			jMenuItemCompactar = new javax.swing.JMenuItem();
+			jMenuItemCompactar = new JMenuItem();
 			jMenuItemCompactar.setText("Compactar Datos");
-			jMenuItemCompactar.setBackground(java.awt.SystemColor.control);
+			jMenuItemCompactar.setBackground(SystemColor.control);
 			jMenuItemCompactar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					compactData();
@@ -439,11 +444,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemCompactar;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemCerrarDia() {
+	private JMenuItem getJMenuItemCerrarDia() {
 		if (jMenuItemCerrarDia == null) {
-			jMenuItemCerrarDia = new javax.swing.JMenuItem();
+			jMenuItemCerrarDia = new JMenuItem();
 			jMenuItemCerrarDia.setText("Cerrar D\u00EDa");
-			jMenuItemCerrarDia.setBackground(java.awt.SystemColor.control);
+			jMenuItemCerrarDia.setBackground(SystemColor.control);
 			jMenuItemCerrarDia.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					closeDay();
@@ -455,15 +460,15 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jMenuItemSalir
-	 * 
+	 *
 	 * @return javax.swing.JMenuItem
 	 */
-	private javax.swing.JMenuItem getJMenuItemSalir() {
+	private JMenuItem getJMenuItemSalir() {
 		if (jMenuItemSalir == null) {
-			jMenuItemSalir = new javax.swing.JMenuItem();
+			jMenuItemSalir = new JMenuItem();
 			jMenuItemSalir.setText("Salir");
 			jMenuItemSalir.setAccelerator(KeyStroke.getKeyStroke('Q', InputEvent.CTRL_MASK));
-			jMenuItemSalir.setBackground(java.awt.SystemColor.control);
+			jMenuItemSalir.setBackground(SystemColor.control);
 			jMenuItemSalir.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					salir();
@@ -473,11 +478,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemSalir;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemAforo() {
+	private JMenuItem getJMenuItemAforo() {
 		if (jMenuItemAforo == null) {
-			jMenuItemAforo = new javax.swing.JMenuItem();
+			jMenuItemAforo = new JMenuItem();
 			jMenuItemAforo.setText("Aforo");
-			jMenuItemAforo.setBackground(java.awt.SystemColor.control);
+			jMenuItemAforo.setBackground(SystemColor.control);
 			jMenuItemAforo.setAccelerator(KeyStroke.getKeyStroke('1', InputEvent.CTRL_MASK));
 			jMenuItemAforo.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -495,11 +500,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemAforo;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemCierres() {
+	private JMenuItem getJMenuItemCierres() {
 		if (jMenuItemCierres == null) {
-			jMenuItemCierres = new javax.swing.JMenuItem();
+			jMenuItemCierres = new JMenuItem();
 			jMenuItemCierres.setText("Cierres");
-			jMenuItemCierres.setBackground(java.awt.SystemColor.control);
+			jMenuItemCierres.setBackground(SystemColor.control);
 			jMenuItemCierres.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					frmCierresList.setVisible(true);
@@ -516,11 +521,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemCierres;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemClaves() {
+	private JMenuItem getJMenuItemClaves() {
 		if (jMenuItemClaves == null) {
-			jMenuItemClaves = new javax.swing.JMenuItem();
+			jMenuItemClaves = new JMenuItem();
 			jMenuItemClaves.setText("Clave");
-			jMenuItemClaves.setBackground(java.awt.SystemColor.control);
+			jMenuItemClaves.setBackground(SystemColor.control);
 			jMenuItemClaves.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					frmUpdatePsw.setVisible(true);
@@ -531,69 +536,25 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		}
 		return jMenuItemClaves;
 	}
-	
-	private javax.swing.JMenuItem getjMenuItemBulkUpload() {
+
+	private JMenuItem getjMenuItemBulkUpload() {
 		if (jMenuItemBulkUpload == null) {
-			jMenuItemBulkUpload = new javax.swing.JMenuItem();
+			jMenuItemBulkUpload = new JMenuItem();
 			jMenuItemBulkUpload.setText("Upload");
-			jMenuItemBulkUpload.setBackground(java.awt.SystemColor.control);
+			jMenuItemBulkUpload.setBackground(SystemColor.control);
 			jMenuItemBulkUpload.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JFileChooser fc = new JFileChooser();
-					int optionChosen = fc.showOpenDialog(null);
-			        
-					if(optionChosen == JFileChooser.APPROVE_OPTION){
-						HSSFWorkbook workbook;
-						BookBuilder bookBuilder = new BookBuilder();
-						
-						try {
-							workbook = new HSSFWorkbook(new FileInputStream(fc.getSelectedFile()));
-							HSSFSheet sheet = workbook.getSheetAt(0);
-							
-							for (Iterator<HSSFRow> rowIterator = sheet.rowIterator(); rowIterator
-									.hasNext();) {
-								HSSFRow row = rowIterator.next();
-								
-								// bookBuilder.with(row);
-								
-							}
-							
-							/*List<OperacionDTO> operaciones = bookBuilder.buildOperations();
-							for (OperacionDTO operacion : operaciones) {
-								model.addOperacion(operacion);
-							}*/
-							
-						} catch (FileNotFoundException fnfe) {
-							throw new RuntimeException("Fail reading file." + fc.getName(),fnfe);
-						} catch (IOException ioe) {
-							throw new RuntimeException("Fail reading file." + fc.getName(),ioe);
-						}
-						
-						
-//						Scanner scanner;
-//						try {
-//							scanner = new Scanner(fc.getSelectedFile());
-//						} catch (FileNotFoundException e1) {
-//							throw new RuntimeException("Fail reading file." + fc.getName(),e1);
-//						}
-//						
-//						//Set the delimiter used in file
-//						scanner.useDelimiter(",");
-//						
-//						//Get all tokens and store them in some data structure
-//						//I am just printing them
-//						while (scanner.hasNext()) 
-//						{
-//							String next = scanner.next();	
-//							System.out.print(next + "|");
-//							while(!"\n".equals(next) && scanner.hasNext()){
-//								next = scanner.next();
-//							}
-//						}
-//						
-//						//Do not forget to close the scanner  
-//						scanner.close();
-						
+					JFileChooser fileChooser = new JFileChooser();
+
+					if (actionCancelled(fileChooser)) {
+						return;
+					}
+
+					FileInputStream fis = readFile(fileChooser);
+
+					List<OperacionDTO> operaciones = new BookBuilder().build(fis);
+					for (OperacionDTO op : operaciones) {
+						model.addOperacion(op);
 					}
 				}
 			});
@@ -601,11 +562,25 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemBulkUpload;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemMovimientos() {
+	private boolean actionCancelled(JFileChooser fileChooser) {
+		return fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION;
+	}
+
+	private FileInputStream readFile(JFileChooser fileChooser) {
+		try {
+			return new FileInputStream(fileChooser.getSelectedFile());
+		} catch (FileNotFoundException fnfe) {
+			throw new RuntimeException("Fail reading file." + fileChooser.getName(), fnfe);
+		} catch (IOException ioe) {
+			throw new RuntimeException("Fail reading file." + fileChooser.getName(), ioe);
+		}
+	}
+
+	private JMenuItem getJMenuItemMovimientos() {
 		if (jMenuItemCuentas == null) {
-			jMenuItemCuentas = new javax.swing.JMenuItem();
+			jMenuItemCuentas = new JMenuItem();
 			jMenuItemCuentas.setText("Liquidacion");
-			jMenuItemCuentas.setBackground(java.awt.SystemColor.control);
+			jMenuItemCuentas.setBackground(SystemColor.control);
 			jMenuItemCuentas.setAccelerator(KeyStroke.getKeyStroke('L', InputEvent.CTRL_MASK));
 			jMenuItemCuentas.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -622,12 +597,12 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemCuentas;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemIngrEgr() {
+	private JMenuItem getJMenuItemIngrEgr() {
 		if (jMenuItemIngrEgr == null) {
-			jMenuItemIngrEgr = new javax.swing.JMenuItem();
+			jMenuItemIngrEgr = new JMenuItem();
 			jMenuItemIngrEgr.setText("Alta Movimientos");
 			jMenuItemIngrEgr.setAccelerator(KeyStroke.getKeyStroke('M', InputEvent.CTRL_MASK));
-			jMenuItemIngrEgr.setBackground(java.awt.SystemColor.control);
+			jMenuItemIngrEgr.setBackground(SystemColor.control);
 			jMenuItemIngrEgr.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					frmOperUnariaList.setVisible(true);
@@ -643,11 +618,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemIngrEgr;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemCtaCteCliente() {
+	private JMenuItem getJMenuItemCtaCteCliente() {
 		if (jMenuItemCtaCteClientes == null) {
-			jMenuItemCtaCteClientes = new javax.swing.JMenuItem();
+			jMenuItemCtaCteClientes = new JMenuItem();
 			jMenuItemCtaCteClientes.setText("Cta.Cte. Clientes");
-			jMenuItemCtaCteClientes.setBackground(java.awt.SystemColor.control);
+			jMenuItemCtaCteClientes.setBackground(SystemColor.control);
 			jMenuItemCtaCteClientes.setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_MASK));
 			jMenuItemCtaCteClientes.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -664,11 +639,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemCtaCteClientes;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemReportes() {
+	private JMenuItem getJMenuItemReportes() {
 		if (jMenuItemReportes == null) {
-			jMenuItemReportes = new javax.swing.JMenuItem();
+			jMenuItemReportes = new JMenuItem();
 			jMenuItemReportes.setText("Generaci\u00F3n Reportes");
-			jMenuItemReportes.setBackground(java.awt.SystemColor.control);
+			jMenuItemReportes.setBackground(SystemColor.control);
 			jMenuItemReportes.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					frmReportes.setVisible(true);
@@ -684,11 +659,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemReportes;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemReporteDirecto() {
+	private JMenuItem getJMenuItemReporteDirecto() {
 		if (jMenuItemReporteDirecto == null) {
-			jMenuItemReporteDirecto = new javax.swing.JMenuItem();
+			jMenuItemReporteDirecto = new JMenuItem();
 			jMenuItemReporteDirecto.setText("Reporte R\u00E1pido");
-			jMenuItemReporteDirecto.setBackground(java.awt.SystemColor.control);
+			jMenuItemReporteDirecto.setBackground(SystemColor.control);
 			jMenuItemReporteDirecto.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Dia dia = BeltzaApplication.getModel().getDiaAbierto();
@@ -712,7 +687,7 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuItemReporteDirecto;
 	}
 
-	private javax.swing.JMenuItem getJMenuReporteDirecto() {
+	private JMenuItem getJMenuReporteDirecto() {
 		JMenu jMenuReporteDirecto = new JMenu("Reportes Rapidos");
 
 		ResourceBundle bundle = ResourceBundle.getBundle(BeltzaApplication.APPLICATION_FILE_NAME);
@@ -727,9 +702,9 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 					shortcut = bundle.getString("quickReport.codigo." + new Integer(i).toString() + ".shortcut");
 				} catch (Exception e) {
 				}
-				JMenuItem jmi = new javax.swing.JMenuItem();
+				JMenuItem jmi = new JMenuItem();
 				jmi.setText(reso);
-				jmi.setBackground(java.awt.SystemColor.control);
+				jmi.setBackground(SystemColor.control);
 				if (shortcut != null && shortcut.trim().length() > 0)
 					jmi.setAccelerator(KeyStroke.getKeyStroke(shortcut.toCharArray()[0], InputEvent.CTRL_MASK));
 				jmi.addActionListener(new java.awt.event.ActionListener() {
@@ -760,18 +735,18 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 		return jMenuReporteDirecto;
 	}
 
-	private javax.swing.JMenuItem getJMenuItemAcerca() {
+	private JMenuItem getJMenuItemAcerca() {
 		if (jMenuItemAcerca == null) {
-			jMenuItemAcerca = new javax.swing.JMenuItem();
+			jMenuItemAcerca = new JMenuItem();
 			jMenuItemAcerca.setText("Acerca de...");
-			jMenuItemAcerca.setBackground(java.awt.SystemColor.control);
+			jMenuItemAcerca.setBackground(SystemColor.control);
 		}
 		return jMenuItemAcerca;
 	}
 
 	/**
 	 * This method initializes jDesktopPane
-	 * 
+	 *
 	 * @return javax.swing.JDesktopPane
 	 */
 	private JDesktopPane getJDesktopPane() {
@@ -787,7 +762,7 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jPanelEstadoFinanciera
-	 * 
+	 *
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelEstadoFinanciera() {
@@ -823,7 +798,7 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jtxtbillete
-	 * 
+	 *
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJtxtbillete() {
@@ -842,7 +817,7 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	/**
 	 * This method initializes jtxtPesos
-	 * 
+	 *
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJtxtPesos() {
@@ -860,9 +835,9 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	private JMenuItem getJMenuItemLista() {
 		if (jMenuItemLista == null) {
-			jMenuItemLista = new javax.swing.JMenuItem();
+			jMenuItemLista = new JMenuItem();
 			jMenuItemLista.setText("Alta Operaciones");
-			jMenuItemLista.setBackground(java.awt.SystemColor.control);
+			jMenuItemLista.setBackground(SystemColor.control);
 			jMenuItemLista.setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_MASK));
 			jMenuItemLista.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -890,8 +865,8 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 	private void openDay() {
 		Dia dia = BeltzaApplication.getModel().getDiaAbierto();
 		if (dia != null)
-			JOptionPane.showMessageDialog(null, "Ya hay un d\u00EDa Abierto (" + UtilGUI.formatFecha(dia.getFechaAsociada())
-					+ "). Debe cerrarlo antes de abrir otro.");
+			JOptionPane.showMessageDialog(null,
+					"Ya hay un d\u00EDa Abierto (" + UtilGUI.formatFecha(dia.getFechaAsociada()) + "). Debe cerrarlo antes de abrir otro.");
 		else {
 			this.frmOpenDay.setVisible(true);
 
@@ -909,10 +884,11 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 	private void reopenDay() {
 		Dia dia = BeltzaApplication.getModel().getDiaAbierto();
 		if (dia != null)
-			JOptionPane.showMessageDialog(null, "Ya hay un d\u00EDa Abierto (" + UtilGUI.formatFecha(dia.getFechaAsociada())
-					+ "). Debe cerrarlo antes de abrir otro.");
+			JOptionPane.showMessageDialog(null,
+					"Ya hay un d\u00EDa Abierto (" + UtilGUI.formatFecha(dia.getFechaAsociada()) + "). Debe cerrarlo antes de abrir otro.");
 		else {
-			if (JOptionPane.showConfirmDialog(null, "¿Confirma que desea Re-abrir el \u00FAltimo d\u00EDa cerrado?", "Confirmaci\u00F3n Abrir", JOptionPane.OK_CANCEL_OPTION) == 0) {
+			if (JOptionPane.showConfirmDialog(null, "¿Confirma que desea Re-abrir el \u00FAltimo d\u00EDa cerrado?", "Confirmaci\u00F3n Abrir",
+					JOptionPane.OK_CANCEL_OPTION) == 0) {
 				BeltzaApplication.getModel().reabrirUltimoDia();
 				dia = BeltzaApplication.getModel().getDiaAbierto();
 				JOptionPane.showMessageDialog(null, "D\u00EDa Abierto correctamente (" + UtilGUI.formatFecha(dia.getFechaAsociada()) + ")");
@@ -922,7 +898,8 @@ public class FormPrincipal extends JFrame implements BeltzaObserver {
 
 	private void deleteDay() {
 		try {
-			if (JOptionPane.showConfirmDialog(null, "¿Confirma que desea Borrar el \u00FAltimo d\u00EDa cerrado?", "Confirmaci\u00F3n Borrar", JOptionPane.OK_CANCEL_OPTION) == 0) {
+			if (JOptionPane.showConfirmDialog(null, "¿Confirma que desea Borrar el \u00FAltimo d\u00EDa cerrado?", "Confirmaci\u00F3n Borrar",
+					JOptionPane.OK_CANCEL_OPTION) == 0) {
 				boolean pudoBorrar = BeltzaApplication.getModel().borrarUltimoDiaCerrado();
 				if (!pudoBorrar)
 					JOptionPane.showMessageDialog(null, "No se pudo borrar el d\u00EDa.");

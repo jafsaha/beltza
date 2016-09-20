@@ -88,7 +88,7 @@ public class SimpleTable implements ListSelectionListener {
 
 			if (selRows.length > 0) {
 				for (int i = 0; i < 3; i++) {
-					// get Table data
+					// getIndexOf Table data
 					TableModel tm = aTable.getModel();
 					value = tm.getValueAt(selRows[0], i);
 					System.out.println("Selection : " + value);

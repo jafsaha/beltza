@@ -209,7 +209,7 @@ public class FormLogin extends JDialog {
 
 	private void ingresoSistema() {
 		this.setVisible(false);
-		FormPrincipal fmPrincipal = new FormPrincipal(this.model);
+		beltza.view.menu.file.FormPrincipal fmPrincipal = new beltza.view.menu.file.FormPrincipal(this.model);
 	}
 
 	private void salir() {
