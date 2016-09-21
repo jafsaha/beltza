@@ -66,9 +66,13 @@ public class BookBuilder {
 	}
 
 	private boolean isEmpty(HSSFRow row) {
+		if (row == null){
+			return true;
+		}
+		
 		for (Iterator<HSSFCell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
 			HSSFCell cell = cellIterator.next();
-			if (HSSFCell.CELL_TYPE_BLANK != cell.getCellType()) {
+			if (cell != null && HSSFCell.CELL_TYPE_BLANK != cell.getCellType()) {
 				return false;
 			}
 		}
