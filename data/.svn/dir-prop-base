@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 92
+BeltzaDB.script
+BeltzaDB.data
+BeltzaDB.lck
+BeltzaDB.log
+BeltzaDB.properties
+BeltzaDB.backup
+
+END

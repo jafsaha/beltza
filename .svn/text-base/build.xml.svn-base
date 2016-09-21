@@ -1,0 +1,65 @@
+<?xml version = '1.0' encoding = 'ISO-8859-1'?>
+<project name="Beltza" default="dist" basedir=".">
+  	<description>beltza build file</description>
+	<property name="src" location="src"/>
+	<property name="dist_lib" location="ant/dist/lib"/>
+	<property name="dist_script" location="ant/dist/script"/>
+	<property name="build" location="ant/build"/>
+	<property name="dist"  location="ant/dist"/>
+ 
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${build}"/>
+	</target>
+	 
+	<target name="copy_libs" description="copia los jars" >
+		<mkdir dir="${dist_lib}"/>
+		<copy todir="${dist_lib}">
+	    	<fileset dir="./lib"/>
+		</copy>	
+	</target>
+	
+	<target name="copy_script" description="copia el script de la DB" >
+		<copy todir="${dist_script}">
+	    	<fileset dir="./script"/>
+		</copy>	
+	</target>
+
+	<target name="copy_run" description="copia los scripts de run" >
+		<copy file="./build/run.script" tofile="${dist}/run.bat"/>
+		<copy file="./build/runsh.script" tofile="${dist}/run.sh"/>
+	</target>
+	
+	<target name="copy_res" description="copia los resources" >
+		<copy todir="${build}">
+	    	<fileset dir="./res"/>
+		</copy>	
+	</target>
+	
+	<target name="copy_reports" description="copia los reports" >
+		<copy todir="${build}/beltza/report/resources">
+	    	<fileset dir="${src}/beltza/report/resources"/>
+		</copy>	
+	</target>
+
+	<target name="compile" depends="init, copy_libs, copy_reports, copy_res, copy_script, copy_run" description="compile the source " >
+		<javac srcdir="${src}" destdir="${build}" encoding="ISO-8859-1" target="1.5">
+	     <classpath>
+			<fileset dir="lib">
+				<include name="**/*.jar"/>
+			</fileset>
+	     </classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="clean, compile" description="generate the distribution" >
+		<mkdir dir="${dist}"/>
+		<jar jarfile="${dist}/beltza.jar" basedir="${build}"/>
+	</target>
+	
+	<target name="clean" description="clean up" >
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+	
+</project>
